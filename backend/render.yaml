@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: product-link-tracker-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: product-link-tracker-db
+          property: connectionString
+      - key: PROVIDER_MODE
+        value: demo
+      - key: FRONTEND_ORIGIN
+        sync: false
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: PROVIDER_API_URL
+        sync: false
+      - key: PROVIDER_API_KEY
+        sync: false
+      - key: PROVIDER_WEBHOOK_SECRET
+        generateValue: true
+databases:
+  - name: product-link-tracker-db
+    databaseName: product_tracker
+    user: tracker
